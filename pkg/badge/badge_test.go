@@ -1,7 +1,6 @@
 package badge_test
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,5 +17,5 @@ func TestGenerateCoverageSVG(t *testing.T) {
 	svg, err := badge.GenerateCoverageSVG(coverageValue1000)
 
 	assert.NoError(t, err, "Unexpected error in generation")
-	assert.True(t, strings.Contains(svg, expectedCoverageAmount), "Didn't find coverage percent text")
+	assert.Contains(t, svg, expectedCoverageAmount, "Didn't find coverage percent text")
 }
