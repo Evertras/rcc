@@ -10,8 +10,10 @@ import (
 
 func TestGenerateCoverageSVG(t *testing.T) {
 	const (
-		coverageValue1000      = 943
-		expectedCoverageAmount = "94.3%"
+		coverageValue1000 = 948
+
+		// Round down
+		expectedCoverageAmount = "94%"
 	)
 
 	svg, err := badge.GenerateCoverageSVG(coverageValue1000)

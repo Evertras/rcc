@@ -49,7 +49,7 @@ func (r *mockCoverageRepo) GetValue1000(ctx context.Context, key string) (int, e
 }
 
 func TestServerStopsOnContextDone(t *testing.T) {
-	s := server.New(newMockCoverageRepo())
+	s := server.New(server.NewDefaultConfig(), newMockCoverageRepo())
 
 	const expectedTimeout = time.Millisecond * 10
 

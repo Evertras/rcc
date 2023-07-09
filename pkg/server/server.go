@@ -19,7 +19,7 @@ type Server struct {
 	server *http.Server
 }
 
-func New(coverageRepo CoverageRepository) *Server {
+func New(cfg Config, coverageRepo CoverageRepository) *Server {
 	r := chi.NewRouter()
 
 	// Middleware for all routes
@@ -31,6 +31,7 @@ func New(coverageRepo CoverageRepository) *Server {
 
 	return &Server{
 		server: &http.Server{
+			Addr:    cfg.Address,
 			Handler: r,
 		},
 	}
@@ -64,13 +65,20 @@ func (s *Server) ListenAndServe(ctx context.Context) error {
 	go func() {
 		<-ctx.Done()
 
+		log.Println("Context cancelled, shutting down server...")
+
 		timeoutCtx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 		defer cancel()
 
 		if err := s.server.Shutdown(timeoutCtx); err != nil {
 			log.Println("Error shutting down:", err)
+			return
 		}
+
+		log.Println("Server shut down successfully")
 	}()
+
+	log.Println("Listening at", s.server.Addr)
 
 	return s.server.ListenAndServe()
 }

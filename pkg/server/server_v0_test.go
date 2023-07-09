@@ -19,7 +19,7 @@ func TestV0PutWithNoKeyReturns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("PUT", route, nil)
 
-	s := server.New(newMockCoverageRepo())
+	s := server.New(server.NewDefaultConfig(), newMockCoverageRepo())
 
 	s.Handle(w, r)
 
@@ -32,7 +32,7 @@ func TestV0PutWithNoValueReturns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("PUT", route, nil)
 
-	s := server.New(newMockCoverageRepo())
+	s := server.New(server.NewDefaultConfig(), newMockCoverageRepo())
 
 	s.Handle(w, r)
 
@@ -92,7 +92,7 @@ func TestV0Put(t *testing.T) {
 			r := httptest.NewRequest("PUT", route, nil)
 			mockRepo := newMockCoverageRepo()
 
-			s := server.New(mockRepo)
+			s := server.New(server.NewDefaultConfig(), mockRepo)
 
 			s.Handle(w, r)
 
@@ -117,7 +117,7 @@ func TestV0GetNoKey(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", route, nil)
 
-	s := server.New(newMockCoverageRepo())
+	s := server.New(server.NewDefaultConfig(), newMockCoverageRepo())
 
 	s.Handle(w, r)
 
@@ -167,7 +167,7 @@ func TestV0Get(t *testing.T) {
 			mockRepo := newMockCoverageRepo()
 			err := mockRepo.StoreValue1000(context.Background(), test.key, test.storedValue1000)
 			assert.NoError(t, err, "Failed to set the initial mock value, bad test setup")
-			s := server.New(mockRepo)
+			s := server.New(server.NewDefaultConfig(), mockRepo)
 
 			s.Handle(w, r)
 
@@ -184,7 +184,7 @@ func TestV0BadgeCoverageNoKey(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/api/v0/badge/coverage", nil)
 
-	s := server.New(newMockCoverageRepo())
+	s := server.New(server.NewDefaultConfig(), newMockCoverageRepo())
 
 	s.Handle(w, r)
 
@@ -195,7 +195,7 @@ func TestV0BadgeCoverageNotFound(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/api/v0/badge/coverage?key=idk", nil)
 
-	s := server.New(newMockCoverageRepo())
+	s := server.New(server.NewDefaultConfig(), newMockCoverageRepo())
 
 	s.Handle(w, r)
 
@@ -209,9 +209,11 @@ func TestV0BadgeCoverageNotFound(t *testing.T) {
 
 func TestV0BadgeCoverageReturnsSVG(t *testing.T) {
 	const (
-		key          = "github.com/Evertras/rcc"
-		value1000    = 483
-		expectedText = "48.3%"
+		key       = "github.com/Evertras/rcc"
+		value1000 = 489
+
+		// Round down for now
+		expectedText = "48%"
 	)
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/api/v0/badge/coverage?key="+key, nil)
@@ -221,7 +223,7 @@ func TestV0BadgeCoverageReturnsSVG(t *testing.T) {
 
 	assert.NoError(t, err, "Unexpected error setting test value, bad test setup")
 
-	s := server.New(mockRepo)
+	s := server.New(server.NewDefaultConfig(), mockRepo)
 
 	s.Handle(w, r)
 

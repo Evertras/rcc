@@ -23,6 +23,7 @@ func v0HandlerBadgeCoverage(getter coverageValueGetter) http.HandlerFunc {
 		if err != nil {
 			if strings.Contains(err.Error(), "not found") {
 				// Return 200, let the badge visually show that we didn't find it
+				w.Header().Add("Content-Type", "image/svg+xml")
 				w.Write([]byte(badge.GenerateCoverageUnknownSVG()))
 				return
 			}
@@ -39,6 +40,7 @@ func v0HandlerBadgeCoverage(getter coverageValueGetter) http.HandlerFunc {
 			return
 		}
 
+		w.Header().Add("Content-Type", "image/svg+xml")
 		w.Write([]byte(b))
 	}
 }

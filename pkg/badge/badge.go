@@ -37,7 +37,8 @@ func GenerateCoverageSVG(value1000 int) (string, error) {
 	var buf bytes.Buffer
 
 	err := coverageTemplate.Execute(&buf, coverageTemplateData{
-		CoveragePercent: fmt.Sprintf("%d.%d%%", value1000/10, value1000%10),
+		// For now, we discard decimal places
+		CoveragePercent: fmt.Sprintf("%d%%", value1000/10),
 	})
 
 	if err != nil {
