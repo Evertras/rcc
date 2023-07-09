@@ -109,3 +109,16 @@ func TestV0Put(t *testing.T) {
 		})
 	}
 }
+
+func TestV0GetNoKey(t *testing.T) {
+	const route = "/api/v0/coverage"
+
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", route, nil)
+
+	s := server.New(newMockCoverageRepo())
+
+	s.Handle(w, r)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}

@@ -11,6 +11,7 @@ import (
 )
 
 type CoverageRepository interface {
+	coverageValueGetter
 	coverageValueStorer
 }
 
@@ -50,6 +51,7 @@ func v0Router(coverageRepo CoverageRepository) chi.Router {
 	r.Use(middleware.NoCache)
 
 	r.Put("/coverage", v0HandlerCoveragePut(coverageRepo))
+	r.Get("/coverage", v0HandlerCoverageGet(coverageRepo))
 
 	return r
 }

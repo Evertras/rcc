@@ -44,6 +44,10 @@ func (r *mockCoverageRepo) StoreValue1000(ctx context.Context, key string, value
 	return nil
 }
 
+func (r *mockCoverageRepo) GetValue1000(ctx context.Context, key string) (int, error) {
+	return r.getValue1000(key)
+}
+
 func TestServerStopsOnContextDone(t *testing.T) {
 	s := server.New(newMockCoverageRepo())
 
