@@ -4,7 +4,8 @@
   <img src='https://rcc.evertras.com/api/v0/badge/coverage?key=github.com/Evertras/rcc' alt='Coverage Status'/>
 </p>
 
-A simple remote code coverage tool for self-hosting.
+A simple remote code coverage tool for self-hosting.  The above badge
+is using this service!
 
 ## Why does this exist?
 
