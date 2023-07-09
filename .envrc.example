@@ -1,0 +1,2 @@
+# Call things in ./bin easily
+PATH_add bin
