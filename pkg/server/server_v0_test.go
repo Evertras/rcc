@@ -204,7 +204,7 @@ func TestV0BadgeCoverageNotFound(t *testing.T) {
 
 	body := w.Body.String()
 
-	assert.Contains(t, body, "??.?%", "Should have ?? to denote unknown value in badge")
+	assert.Contains(t, body, "??%", "Should have ??% to denote unknown value in badge")
 }
 
 func TestV0BadgeCoverageReturnsSVG(t *testing.T) {

@@ -23,7 +23,7 @@ func init() {
 	var buf bytes.Buffer
 
 	err := coverageTemplate.Execute(&buf, coverageTemplateData{
-		CoveragePercent: "??.?%",
+		CoveragePercent: "??%",
 	})
 
 	if err != nil {
