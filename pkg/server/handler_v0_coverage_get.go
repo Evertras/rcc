@@ -2,7 +2,10 @@ package server
 
 import (
 	"context"
+	"fmt"
+	"log"
 	"net/http"
+	"strings"
 )
 
 type coverageValueGetter interface {
@@ -20,6 +23,21 @@ func v0HandlerCoverageGet(getter coverageValueGetter) http.HandlerFunc {
 				w.Write([]byte("Missing key"))
 				return
 			}
+
+			val1000, err := getter.GetValue1000(r.Context(), key)
+
+			if err != nil {
+				if strings.Contains(err.Error(), "not found") {
+					w.WriteHeader(http.StatusNotFound)
+					return
+				}
+
+				w.WriteHeader(http.StatusInternalServerError)
+				log.Printf("ERROR: Failed to get coverage for key %q: %s", key, err.Error())
+				return
+			}
+
+			fmt.Fprintf(w, "%d.%d", val1000/10, val1000%10)
 		},
 	)
 }
