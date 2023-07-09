@@ -31,5 +31,7 @@ jobs:
 
       - name: Send coverage
         run: |
-          curl -XPUT "https://rcc.evertras.com/api/v0/coverage?key=github.com/Evertras/rcc&value=$(go tool cover -func coverage.out | grep total | awk '${print $3}')"
+          value100=$(go tool cover -func coverage.out | grep total | awk '${print $3}')
+          echo "Coverage is ${value100}"
+          curl -XPUT "https://rcc.evertras.com/api/v0/coverage?key=github.com/Evertras/rcc&value100=${value100}"
 
