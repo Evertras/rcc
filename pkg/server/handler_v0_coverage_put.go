@@ -1,16 +1,10 @@
 package server
 
 import (
-	"context"
 	"log"
 	"net/http"
 	"strings"
 )
-
-type coverageValueStorer interface {
-	// StoreValue1000 stores a value as an integer that includes 1 decimal
-	StoreValue1000(ctx context.Context, key string, value1000 int) error
-}
 
 func v0HandlerCoveragePut(storer coverageValueStorer) http.HandlerFunc {
 	return http.HandlerFunc(

@@ -10,11 +10,6 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-type CoverageRepository interface {
-	coverageValueGetter
-	coverageValueStorer
-}
-
 type Server struct {
 	server *http.Server
 }

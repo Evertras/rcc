@@ -1,16 +1,11 @@
 package server
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"strings"
 )
-
-type coverageValueGetter interface {
-	GetValue1000(ctx context.Context, key string) (int, error)
-}
 
 func v0HandlerCoverageGet(getter coverageValueGetter) http.HandlerFunc {
 	return http.HandlerFunc(
