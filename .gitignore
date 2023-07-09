@@ -13,3 +13,6 @@
 
 # Terraform stuff
 .terraform
+
+# Local file storage default
+/rcc-storage

@@ -31,6 +31,20 @@ total coverage.  Custom thresholds can be specified for red/orange/green colors.
 This very simply stores the main branch code coverage for a given repository
 as the key.  A few different options are available for storage.
 
+When using the standalone server binary, you can supply the storage type as a flag
+or as an environment variable.
+
+```bash
+# Build the standalone server
+make bin/rcc
+
+# Run the standalone server with file storage mode as flag
+./bin/rcc --storage-type file
+
+# Run it with environment variable
+RCC_STORAGE_TYPE=file ./bin/rcc
+```
+
 ### In Memory
 
 A simple in-memory repository is default for testing.  This should not actually
