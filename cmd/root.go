@@ -8,7 +8,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use: "rcc",
+	Use:   "rcc",
 	Short: "Host and serve code coverage badges",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Hi")
