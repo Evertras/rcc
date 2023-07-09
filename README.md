@@ -61,6 +61,9 @@ be used anywhere besides for quick testing purposes.
 Stores all key/values in a local directory that can be supplied with config.
 Useful for running in a non-AWS setup.
 
+The directory can be supplied with `--file-storage-base-dir` and defaults
+to `./rcc-storage`
+
 ### DynamoDB
 
 `--storage-type dynamodb`
@@ -74,6 +77,7 @@ Stores data in DynamoDB because it's cheap and easy.  The following schema is us
 | LastUpdated | S  | The timestamp of when this coverage was last set. |
 
 Note that this is only really supported in the lambda version for now.
+The table can be specified with `--dynamodb-table` and defaults to `evertras-rcc`.
 
 ## How it's deployed
 
