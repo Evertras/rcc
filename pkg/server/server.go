@@ -10,18 +10,23 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
+type CoverageRepository interface {
+	CoverageValueStorer
+}
+
 type Server struct {
 	server *http.Server
 }
 
-func New() *Server {
+func New(coverageRepo CoverageRepository) *Server {
 	r := chi.NewRouter()
 
 	// Middleware for all routes
 	r.Use(middleware.Logger)
+	r.Use(middleware.StripSlashes)
 
 	// Subrouters
-	r.Mount("/api", apiRouter())
+	r.Mount("/api", apiRouter(coverageRepo))
 
 	return &Server{
 		server: &http.Server{
@@ -30,21 +35,21 @@ func New() *Server {
 	}
 }
 
-func apiRouter() chi.Router {
+func apiRouter(coverageRepo CoverageRepository) chi.Router {
 	r := chi.NewRouter()
 
-	r.Mount("/v0", v0Router())
+	r.Mount("/v0", v0Router(coverageRepo))
 
 	return r
 }
 
-func v0Router() chi.Router {
+func v0Router(coverageRepo CoverageRepository) chi.Router {
 	r := chi.NewRouter()
 
 	// Don't cache values on client side because they may change
 	r.Use(middleware.NoCache)
 
-	r.Put("/coverage/value100", v0HandlerCoveragePut())
+	r.Put("/coverage", v0HandlerCoveragePut(coverageRepo))
 
 	return r
 }
