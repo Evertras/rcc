@@ -33,7 +33,15 @@ func v0HandlerBadgeCoverage(getter coverageValueGetter) http.HandlerFunc {
 			return
 		}
 
-		b, err := badge.GenerateCoverageSVG(value1000)
+		color := badge.ColorGreen
+
+		if value1000 < 500 {
+			color = badge.ColorRed
+		} else if value1000 < 800 {
+			color = badge.ColorOrange
+		}
+
+		b, err := badge.GenerateCoverageSVG(value1000, color)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			log.Printf("ERROR: Failed to generate badge from value %d: %s", value1000, err.Error())

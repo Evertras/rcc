@@ -36,6 +36,10 @@ func NewDynamoDB(tableName string) (*DynamoDB, error) {
 }
 
 func (d *DynamoDB) StoreValue1000(ctx context.Context, key string, value1000 int) error {
+	if len(key) > 64 {
+		return fmt.Errorf("key is too long")
+	}
+
 	item := DynamoDBEntry{
 		Key:       key,
 		Value1000: value1000,
@@ -61,6 +65,10 @@ func (d *DynamoDB) StoreValue1000(ctx context.Context, key string, value1000 int
 }
 
 func (d *DynamoDB) GetValue1000(ctx context.Context, key string) (int, error) {
+	if len(key) > 64 {
+		return 0, fmt.Errorf("key is too long")
+	}
+
 	result, err := d.dyndb.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(d.tableName),
 		Key: map[string]*dynamodb.AttributeValue{

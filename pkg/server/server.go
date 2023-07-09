@@ -48,7 +48,7 @@ func apiRouter(coverageRepo CoverageRepository) chi.Router {
 func v0Router(coverageRepo CoverageRepository) chi.Router {
 	r := chi.NewRouter()
 
-	// Don't cache values on client side because they may change
+	// Don't cache values on client side because they will change
 	r.Use(middleware.NoCache)
 
 	r.Put("/coverage", v0HandlerCoveragePut(coverageRepo))

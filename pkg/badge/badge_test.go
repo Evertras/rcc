@@ -16,7 +16,7 @@ func TestGenerateCoverageSVG(t *testing.T) {
 		expectedCoverageAmount = "94%"
 	)
 
-	svg, err := badge.GenerateCoverageSVG(coverageValue1000)
+	svg, err := badge.GenerateCoverageSVG(coverageValue1000, badge.ColorGreen)
 
 	assert.NoError(t, err, "Unexpected error in generation")
 	assert.Contains(t, svg, expectedCoverageAmount, "Didn't find coverage percent text")
