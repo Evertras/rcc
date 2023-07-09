@@ -36,20 +36,20 @@ Currently none.  Will need to add in the future.
 
 ## Endpoints
 
-Note: `<key>` can be any `[a-zA-Z0-9\.-]` value and is intended to take a value
+Note: `<key>` can be any `[a-zA-Z0-9\./-]` value and is intended to take a value
 such as `github.com/Evertras/rcc`.
 
-### PUT /api/v1/coverage/value100/<key>
+### PUT /api/v1/coverage/value100/?repo=<key>
 
 Sets the coverage value.  Accepts plain text of a number in the range of `[0, 100]`
 to the nearest 2 decimal points for internal storage.  The % sign is optional.
 
-### GET /api/v1/coverage/value100/<key>
+### GET /api/v1/coverage/value100/?repo=<key>
 
 Returns the coverage value as a plaintext value in the format `<0-100.0>%`.  Returns
 rounded to the nearest decimal point.
 
-### GET /api/v1/badge/coverage/<key>
+### GET /api/v1/badge/coverage/?repo=<key>
 
 Returns a code coverage badge that can be linked to in a readme.
 
