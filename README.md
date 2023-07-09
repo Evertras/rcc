@@ -52,15 +52,3 @@ rounded to the nearest decimal point.
 ### GET /api/v1/badge/coverage/?repo=<key>
 
 Returns a code coverage badge that can be linked to in a readme.
-
-
-
-
-
-
-
-
-
-
-
-
