@@ -16,7 +16,7 @@ as a simple-as-possible self-hosted store for code coverage badges.
 For a given key (usually the repository URL), set the latest code coverage.
 You can also retrieve it as a raw value for any purpose.
 
-### Generate badges
+### Generate coverage badges
 
 You can query the service for a badge based on the main branch's last reported
 total coverage.  Custom thresholds can be specified for red/orange/green colors.
@@ -24,15 +24,26 @@ total coverage.  Custom thresholds can be specified for red/orange/green colors.
 ## What is stored
 
 This very simply stores the main branch code coverage for a given repository
-as the key.
+as the key.  A few different options are available for storage.
 
-For the very first ultra-simple version, this is just stored locally on disk.
-In the future this will need to go to either a DB or S3 for better persistence,
-preferably both as options depending on deployment.
+### In Memory
+
+A simple in-memory repository is default for testing.  This should not actually
+be used anywhere besides for quick testing purposes.
+
+### DynamoDB
+
+Stores data in DynamoDB because it's cheap and easy.  The following schema is used.
+
+| Attribute | Type | Details |
+|-----------|------|---------|
+| Key       | S    | The key for the coverage data.  Generally the full repository URL, such as `github.com/Evertras/rcc`. |
+| Value1000 | N    | The value of the percent coverage for the key, multiplied by 10 and stored as an integer for precision. |
+| LastUpdated | S  | The timestamp of when this coverage was last set. |
 
 ## Auth
 
-Currently none.  Will need to add in the future.
+**Currently none.  Will need to add in the future.**
 
 ## Endpoints
 

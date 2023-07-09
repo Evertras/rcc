@@ -1,8 +1,12 @@
 # Generated binaries and local tools
 /bin
+*.zip
 
 # Mac
 .DS_Store
 
 # Local env stuff
 .envrc
+
+# Terraform stuff
+.terraform

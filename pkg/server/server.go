@@ -83,7 +83,7 @@ func (s *Server) ListenAndServe(ctx context.Context) error {
 	return s.server.ListenAndServe()
 }
 
-// Handle will handle the given response/request directly, useful for lambdas
-func (s *Server) Handle(w http.ResponseWriter, r *http.Request) {
-	s.server.Handler.ServeHTTP(w, r)
+// Handler will return the underlying handler, useful for running a lambda
+func (s *Server) Handler() http.Handler {
+	return s.server.Handler
 }

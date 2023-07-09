@@ -21,7 +21,7 @@ func TestV0PutWithNoKeyReturns400(t *testing.T) {
 
 	s := server.New(server.NewDefaultConfig(), newMockCoverageRepo())
 
-	s.Handle(w, r)
+	s.Handler().ServeHTTP(w, r)
 
 	assert.Equal(t, http.StatusBadRequest, w.Code, "Unexpected HTTP response code")
 }
@@ -34,7 +34,7 @@ func TestV0PutWithNoValueReturns400(t *testing.T) {
 
 	s := server.New(server.NewDefaultConfig(), newMockCoverageRepo())
 
-	s.Handle(w, r)
+	s.Handler().ServeHTTP(w, r)
 
 	assert.Equal(t, http.StatusBadRequest, w.Code, "Unexpected HTTP response code")
 }
@@ -94,7 +94,7 @@ func TestV0Put(t *testing.T) {
 
 			s := server.New(server.NewDefaultConfig(), mockRepo)
 
-			s.Handle(w, r)
+			s.Handler().ServeHTTP(w, r)
 
 			assert.Equal(t, http.StatusOK, w.Code, "Unexpected HTTP response code")
 
@@ -119,7 +119,7 @@ func TestV0GetNoKey(t *testing.T) {
 
 	s := server.New(server.NewDefaultConfig(), newMockCoverageRepo())
 
-	s.Handle(w, r)
+	s.Handler().ServeHTTP(w, r)
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
@@ -169,7 +169,7 @@ func TestV0Get(t *testing.T) {
 			assert.NoError(t, err, "Failed to set the initial mock value, bad test setup")
 			s := server.New(server.NewDefaultConfig(), mockRepo)
 
-			s.Handle(w, r)
+			s.Handler().ServeHTTP(w, r)
 
 			assert.Equal(t, http.StatusOK, w.Code, "Unexpected HTTP response code")
 
@@ -186,7 +186,7 @@ func TestV0BadgeCoverageNoKey(t *testing.T) {
 
 	s := server.New(server.NewDefaultConfig(), newMockCoverageRepo())
 
-	s.Handle(w, r)
+	s.Handler().ServeHTTP(w, r)
 
 	assert.Equal(t, http.StatusBadRequest, w.Code, "Unexpected HTTP status code")
 }
@@ -197,7 +197,7 @@ func TestV0BadgeCoverageNotFound(t *testing.T) {
 
 	s := server.New(server.NewDefaultConfig(), newMockCoverageRepo())
 
-	s.Handle(w, r)
+	s.Handler().ServeHTTP(w, r)
 
 	// Should return 200 OK but the badge itself should indicate not found
 	assert.Equal(t, http.StatusOK, w.Code, "Unexpected HTTP status code")
@@ -225,7 +225,7 @@ func TestV0BadgeCoverageReturnsSVG(t *testing.T) {
 
 	s := server.New(server.NewDefaultConfig(), mockRepo)
 
-	s.Handle(w, r)
+	s.Handler().ServeHTTP(w, r)
 
 	// Should return 200 OK but the badge itself should indicate not found
 	assert.Equal(t, http.StatusOK, w.Code, "Unexpected HTTP status code")
