@@ -45,12 +45,25 @@ make bin/rcc
 RCC_STORAGE_TYPE=file ./bin/rcc
 ```
 
+See `rcc --help` for more configuration options.
+
 ### In Memory
+
+`--storage-type in-memory`
 
 A simple in-memory repository is default for testing.  This should not actually
 be used anywhere besides for quick testing purposes.
 
+### Local File
+
+`--storage-type file`
+
+Stores all key/values in a local directory that can be supplied with config.
+Useful for running in a non-AWS setup.
+
 ### DynamoDB
+
+`--storage-type dynamodb`
 
 Stores data in DynamoDB because it's cheap and easy.  The following schema is used.
 
@@ -59,6 +72,8 @@ Stores data in DynamoDB because it's cheap and easy.  The following schema is us
 | Key       | S    | The key for the coverage data.  Generally the full repository URL, such as `github.com/Evertras/rcc`. |
 | Value1000 | N    | The value of the percent coverage for the key, multiplied by 10 and stored as an integer for precision. |
 | LastUpdated | S  | The timestamp of when this coverage was last set. |
+
+Note that this is only really supported in the lambda version for now.
 
 ## How it's deployed
 
