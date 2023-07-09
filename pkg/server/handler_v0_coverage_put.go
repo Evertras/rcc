@@ -7,12 +7,12 @@ import (
 	"strings"
 )
 
-type CoverageValueStorer interface {
+type coverageValueStorer interface {
 	// StoreValue1000 stores a value as an integer that includes 1 decimal
 	StoreValue1000(ctx context.Context, key string, value1000 int) error
 }
 
-func v0HandlerCoveragePut(storer CoverageValueStorer) http.HandlerFunc {
+func v0HandlerCoveragePut(storer coverageValueStorer) http.HandlerFunc {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			queryVals := r.URL.Query()

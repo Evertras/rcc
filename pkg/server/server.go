@@ -11,7 +11,7 @@ import (
 )
 
 type CoverageRepository interface {
-	CoverageValueStorer
+	coverageValueStorer
 }
 
 type Server struct {
