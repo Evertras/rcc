@@ -52,6 +52,7 @@ func v0Router(coverageRepo CoverageRepository) chi.Router {
 
 	r.Put("/coverage", v0HandlerCoveragePut(coverageRepo))
 	r.Get("/coverage", v0HandlerCoverageGet(coverageRepo))
+	r.Get("/badge/coverage", v0HandlerBadgeCoverage(coverageRepo))
 
 	return r
 }

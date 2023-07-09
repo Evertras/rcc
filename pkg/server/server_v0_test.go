@@ -179,3 +179,57 @@ func TestV0Get(t *testing.T) {
 		})
 	}
 }
+
+func TestV0BadgeCoverageNoKey(t *testing.T) {
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", "/api/v0/badge/coverage", nil)
+
+	s := server.New(newMockCoverageRepo())
+
+	s.Handle(w, r)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code, "Unexpected HTTP status code")
+}
+
+func TestV0BadgeCoverageNotFound(t *testing.T) {
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", "/api/v0/badge/coverage?key=idk", nil)
+
+	s := server.New(newMockCoverageRepo())
+
+	s.Handle(w, r)
+
+	// Should return 200 OK but the badge itself should indicate not found
+	assert.Equal(t, http.StatusOK, w.Code, "Unexpected HTTP status code")
+
+	body := w.Body.String()
+
+	assert.Contains(t, body, "??.?%", "Should have ?? to denote unknown value in badge")
+}
+
+func TestV0BadgeCoverageReturnsSVG(t *testing.T) {
+	const (
+		key          = "github.com/Evertras/rcc"
+		value1000    = 483
+		expectedText = "48.3%"
+	)
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", "/api/v0/badge/coverage?key="+key, nil)
+
+	mockRepo := newMockCoverageRepo()
+	err := mockRepo.StoreValue1000(context.Background(), key, value1000)
+
+	assert.NoError(t, err, "Unexpected error setting test value, bad test setup")
+
+	s := server.New(mockRepo)
+
+	s.Handle(w, r)
+
+	// Should return 200 OK but the badge itself should indicate not found
+	assert.Equal(t, http.StatusOK, w.Code, "Unexpected HTTP status code")
+
+	body := w.Body.String()
+
+	// TODO: Better test of SVG correctness
+	assert.Contains(t, body, expectedText, "Missing expected percent coverage")
+}
