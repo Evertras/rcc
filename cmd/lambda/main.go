@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -17,7 +18,12 @@ func main() {
 		panic("Missing table name")
 	}
 
-	repository := repository.NewDynamoDB(tableName)
+	repository, err := repository.NewDynamoDB(tableName)
+
+	if err != nil {
+		log.Fatal("Failed to create DynamoDB repository:", err)
+	}
+
 	server := server.New(server.NewDefaultConfig(), repository)
 
 	// Even though we're behind a v2 gateway, we still use the v1 adapter here

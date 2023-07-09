@@ -17,26 +17,25 @@ type DynamoDBEntry struct {
 
 type DynamoDB struct {
 	tableName string
+	dyndb     *dynamodb.DynamoDB
 }
 
-func NewDynamoDB(tableName string) *DynamoDB {
-	return &DynamoDB{
-		tableName: tableName,
-	}
-}
-
-func (d *DynamoDB) StoreValue1000(ctx context.Context, key string, value1000 int) error {
-	// TODO: Do this once?
+func NewDynamoDB(tableName string) (*DynamoDB, error) {
 	sess, err := session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 	})
 
 	if err != nil {
-		return fmt.Errorf("session.NewSessionWithOptions: %w", err)
+		return nil, fmt.Errorf("failed to create session: %w", err)
 	}
 
-	svc := dynamodb.New(sess)
+	return &DynamoDB{
+		tableName: tableName,
+		dyndb:     dynamodb.New(sess),
+	}, nil
+}
 
+func (d *DynamoDB) StoreValue1000(ctx context.Context, key string, value1000 int) error {
 	item := DynamoDBEntry{
 		Key:       key,
 		Value1000: value1000,
@@ -52,10 +51,10 @@ func (d *DynamoDB) StoreValue1000(ctx context.Context, key string, value1000 int
 		TableName: aws.String(d.tableName),
 	}
 
-	_, err = svc.PutItem(input)
+	_, err = d.dyndb.PutItem(input)
 
 	if err != nil {
-		return fmt.Errorf("svc.PutItem: %w", err)
+		return fmt.Errorf("d.dyndb.PutItem: %w", err)
 	}
 
 	return nil
