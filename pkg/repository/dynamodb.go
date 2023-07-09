@@ -26,7 +26,7 @@ func NewDynamoDB(tableName string) (*DynamoDB, error) {
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to create session: %w", err)
+		return nil, fmt.Errorf("session.NewSessionWithOptions: %w", err)
 	}
 
 	return &DynamoDB{
@@ -61,5 +61,29 @@ func (d *DynamoDB) StoreValue1000(ctx context.Context, key string, value1000 int
 }
 
 func (d *DynamoDB) GetValue1000(ctx context.Context, key string) (int, error) {
-	return 0, fmt.Errorf("not found")
+	result, err := d.dyndb.GetItem(&dynamodb.GetItemInput{
+		TableName: aws.String(d.tableName),
+		Key: map[string]*dynamodb.AttributeValue{
+			"Key": {
+				S: aws.String(key),
+			},
+		},
+	})
+
+	if err != nil {
+		return 0, fmt.Errorf("d.dyndb.GetItem: %w", err)
+	}
+
+	if result.Item == nil {
+		return 0, fmt.Errorf("not found")
+	}
+
+	entry := DynamoDBEntry{}
+
+	err = dynamodbattribute.UnmarshalMap(result.Item, &entry)
+	if err != nil {
+		return 0, fmt.Errorf("dynamodbattribute.UnmarshalMap: %w", err)
+	}
+
+	return entry.Value1000, nil
 }

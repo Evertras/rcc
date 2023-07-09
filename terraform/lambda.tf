@@ -19,6 +19,7 @@ resource "aws_iam_policy" "lambda_readwrite_dynamodb" {
     Statement = [
       {
         Action = [
+          "dynamodb:GetItem",
           "dynamodb:PutItem",
         ]
         Effect = "Allow"
