@@ -41,9 +41,17 @@ Stores data in DynamoDB because it's cheap and easy.  The following schema is us
 | Value1000 | N    | The value of the percent coverage for the key, multiplied by 10 and stored as an integer for precision. |
 | LastUpdated | S  | The timestamp of when this coverage was last set. |
 
+## How it's deployed
+
+Currently deployed to `https://rcc.evertras.com/` via the [terraform](./terraform)
+code provided here.  Runs as an AWS Lambda writing to DynamoDB purely for
+cost purposes.  This could be deployed as a containerized instance somewhere,
+but lambdas are pretty quick/cheap for something that doesn't need to be running
+all the time.
+
 ## Auth
 
-**Currently none.  Will need to add in the future.**
+**Currently none.  Will need to add in the future to avoid abuse.**
 
 ## Endpoints
 
