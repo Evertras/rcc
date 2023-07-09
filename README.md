@@ -1,5 +1,9 @@
 # rcc
 
+<p>
+  <img src='https://rcc.evertras.com/api/v0/badge/coverage?key=github.com/Evertras/rcc' alt='Coverage Status'/>
+</p>
+
 A simple remote code coverage tool for self-hosting.
 
 ## Why does this exist?
