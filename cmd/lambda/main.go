@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 
@@ -9,7 +11,13 @@ import (
 )
 
 func main() {
-	repository := repository.NewInMemory()
+	// TODO: proper config instead of magic env var
+	tableName := os.Getenv("EVERTRAS_RCC_DYNAMODB_TABLE_NAME")
+	if tableName == "" {
+		panic("Missing table name")
+	}
+
+	repository := repository.NewDynamoDB(tableName)
 	server := server.New(server.NewDefaultConfig(), repository)
 
 	// Even though we're behind a v2 gateway, we still use the v1 adapter here

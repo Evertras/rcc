@@ -42,13 +42,20 @@ func v0HandlerCoveragePut(storer coverageValueStorer) http.HandlerFunc {
 				return
 			}
 
+			log.Printf("Setting coverage for %q to %d", key, parsedValue1000)
+
 			err = storer.StoreValue1000(r.Context(), key, parsedValue1000)
 
 			if err != nil {
+				log.Println("Failed to store value:", err.Error())
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte("Something went wrong when storing the value"))
 				return
 			}
+
+			log.Println("Successfully stored coverage value")
+
+			w.WriteHeader(http.StatusOK)
 		},
 	)
 }

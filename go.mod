@@ -3,11 +3,14 @@ module github.com/evertras/rcc
 go 1.20
 
 require (
+	github.com/aws/aws-sdk-go v1.44.298
 	github.com/awslabs/aws-lambda-go-api-proxy v0.14.0
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/spf13/cobra v1.7.0
 	github.com/stretchr/testify v1.8.4
 )
+
+require github.com/jmespath/go-jmespath v0.4.0 // indirect
 
 require (
 	github.com/aws/aws-lambda-go v1.41.0
