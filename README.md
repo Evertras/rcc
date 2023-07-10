@@ -87,6 +87,23 @@ cost purposes.  This could be deployed as a containerized instance somewhere,
 but lambdas are pretty quick/cheap for something that doesn't need to be running
 all the time.
 
+### Docker
+
+A Docker image is available.  By default it's configured to use the file data store
+in the `/data` directory for simple use and file mounting, but you can also supply
+either environment variables or command line flags if you wish to use other configs.
+
+```bash
+# Run it
+docker run -d -p 1234:8431 -v /some/data/path:/data evertras/rcc:latest
+
+# Try it
+curl -XPUT "localhost:1234/api/v0/coverage?key=abc&value100=38.4"
+curl "localhost:1234/api/v0/coverage?key=abc"
+curl "localhost:1234/api/v0/badge/coverage?key=abc"
+ls /some/data/path
+```
+
 ## Auth
 
 **Currently none.  Will need to add in the future to avoid abuse.**

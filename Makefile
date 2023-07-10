@@ -16,6 +16,10 @@ fmt:
 test:
 	@go test ./pkg/...
 
+.PHONY: docker
+docker:
+	docker build -t evertras/rcc:latest .
+
 ################################################################################
 # Local tooling
 #
