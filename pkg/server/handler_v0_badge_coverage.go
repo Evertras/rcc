@@ -14,7 +14,7 @@ func v0HandlerBadgeCoverage(getter coverageValueGetter) http.HandlerFunc {
 
 		if key == "" {
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte("Missing key"))
+			_, _ = w.Write([]byte("Missing key"))
 			return
 		}
 
@@ -24,7 +24,7 @@ func v0HandlerBadgeCoverage(getter coverageValueGetter) http.HandlerFunc {
 			if strings.Contains(err.Error(), "not found") {
 				// Return 200, let the badge visually show that we didn't find it
 				w.Header().Add("Content-Type", "image/svg+xml")
-				w.Write([]byte(badge.GenerateCoverageUnknownSVG()))
+				_, _ = w.Write([]byte(badge.GenerateCoverageUnknownSVG()))
 				return
 			}
 
@@ -49,6 +49,6 @@ func v0HandlerBadgeCoverage(getter coverageValueGetter) http.HandlerFunc {
 		}
 
 		w.Header().Add("Content-Type", "image/svg+xml")
-		w.Write([]byte(b))
+		_, _ = w.Write([]byte(b))
 	}
 }

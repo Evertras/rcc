@@ -14,14 +14,14 @@ func v0HandlerCoveragePut(storer coverageValueStorer) http.HandlerFunc {
 			key := queryVals.Get("key")
 			if key == "" {
 				w.WriteHeader(http.StatusBadRequest)
-				w.Write([]byte("Missing key"))
+				_, _ = w.Write([]byte("Missing key"))
 				return
 			}
 
 			value100Raw := queryVals.Get("value100")
 			if value100Raw == "" {
 				w.WriteHeader(http.StatusBadRequest)
-				w.Write([]byte("Missing value100"))
+				_, _ = w.Write([]byte("Missing value100"))
 				return
 			}
 
@@ -32,7 +32,7 @@ func v0HandlerCoveragePut(storer coverageValueStorer) http.HandlerFunc {
 			if err != nil {
 				log.Printf("Failed to parse %q: %s", value100Raw, err.Error())
 				w.WriteHeader(http.StatusBadRequest)
-				w.Write([]byte(err.Error()))
+				_, _ = w.Write([]byte(err.Error()))
 				return
 			}
 
@@ -43,7 +43,7 @@ func v0HandlerCoveragePut(storer coverageValueStorer) http.HandlerFunc {
 			if err != nil {
 				log.Println("Failed to store value:", err.Error())
 				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte("Something went wrong when storing the value"))
+				_, _ = w.Write([]byte("Something went wrong when storing the value"))
 				return
 			}
 

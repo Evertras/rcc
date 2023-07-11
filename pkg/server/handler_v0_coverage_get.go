@@ -15,7 +15,7 @@ func v0HandlerCoverageGet(getter coverageValueGetter) http.HandlerFunc {
 			key := queryVals.Get("key")
 			if key == "" {
 				w.WriteHeader(http.StatusBadRequest)
-				w.Write([]byte("Missing key"))
+				_, _ = w.Write([]byte("Missing key"))
 				return
 			}
 
