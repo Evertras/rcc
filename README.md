@@ -130,7 +130,7 @@ Returns a code coverage badge that can be linked to in a readme.
 
 Optionally, `label=[text]` can be given to change the label from "coverage" to something else.
 
-Optionally, `thresholdOrange100=[val]` and `thresholdRed100=[val]` can be supplied.  They default to 80% and 50%, respectively.  If the coverage value is less than (but not equal to) these values, the badge will be orange or red.  If the red threshold is greater than the orange threshold, the badge will be either red or green only.
+Optionally, `thresholdOrange100=[val]` and `thresholdRed100=[val]` can be supplied.  They default to `80` and `50`, respectively.  If the coverage value is less than (but not equal to) these values, the badge will be orange or red.  If the red threshold is greater than the orange threshold, the badge will be either red or green only.
 
 This README's badge is set as follows:
 

@@ -27,7 +27,7 @@ func v0HandlerBadgeCoverage(getter coverageValueGetter) http.HandlerFunc {
 				return defaultValue, nil
 			}
 
-			parsed, err := strconv.Atoi(raw)
+			parsed, err := strconv.Atoi(strings.TrimRight(raw, "%"))
 
 			if err != nil {
 				return 0, fmt.Errorf("could not parse value")

@@ -345,11 +345,11 @@ func TestV0BadgeCoverageReturnsSVGWithColorThresholds(t *testing.T) {
 			path := fmt.Sprintf("/api/v0/badge/coverage?key=%s", key)
 
 			if test.thresholdOrange100 != 0 {
-				path += fmt.Sprintf("&thresholdOrange100=%d", test.thresholdOrange100)
+				path += fmt.Sprintf("&thresholdOrange100=%d%%25", test.thresholdOrange100)
 			}
 
 			if test.thresholdRed100 != 0 {
-				path += fmt.Sprintf("&thresholdRed100=%d", test.thresholdRed100)
+				path += fmt.Sprintf("&thresholdRed100=%d%%25", test.thresholdRed100)
 			}
 
 			w := httptest.NewRecorder()
