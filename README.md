@@ -89,13 +89,15 @@ all the time.
 
 ### Docker
 
+[Dockerhub link](https://hub.docker.com/repository/docker/evertras/rcc)
+
 A Docker image is available.  By default it's configured to use the file data store
 in the `/data` directory for simple use and file mounting, but you can also supply
 either environment variables or command line flags if you wish to use other configs.
 
 ```bash
 # Run it
-docker run -d -p 1234:8431 -v /some/data/path:/data evertras/rcc:latest
+docker run -d -p 1234:8431 -v /some/data/path:/data evertras/rcc:v0.1.0
 
 # Try it
 curl -XPUT "localhost:1234/api/v0/coverage?key=abc&value100=38.4"
