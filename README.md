@@ -128,6 +128,8 @@ rounded to the nearest decimal point.
 
 Returns a code coverage badge that can be linked to in a readme.
 
+Optionally, `label=[text]` can be given to change the label from "coverage" to something else.
+
 This README's badge is set as follows:
 
 ```html
