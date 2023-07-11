@@ -9,8 +9,9 @@ bin/lambda: $(GO_FILES)
 	CGO_ENABLED=0 GOOS=linux go build -o bin/lambda ./cmd/lambda
 
 .PHONY: fmt
-fmt:
-	@go fmt ./...
+fmt: node_modules
+	go fmt ./...
+	npx prettier --write .
 
 .PHONY: test
 test:
@@ -19,6 +20,10 @@ test:
 .PHONY: docker
 docker:
 	docker build -t evertras/rcc:latest .
+
+node_modules: package.json package-lock.json
+	npm install
+	@touch node_modules
 
 ################################################################################
 # Local tooling
