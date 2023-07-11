@@ -1,7 +1,6 @@
 package server_test
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/evertras/rcc/pkg/badge"
 	"github.com/evertras/rcc/pkg/server"
 )
 
@@ -164,9 +164,7 @@ func TestV0Get(t *testing.T) {
 			w := httptest.NewRecorder()
 			r := httptest.NewRequest("GET", route, nil)
 
-			mockRepo := newMockCoverageRepo()
-			err := mockRepo.StoreValue1000(context.Background(), test.key, test.storedValue1000)
-			assert.NoError(t, err, "Failed to set the initial mock value, bad test setup")
+			mockRepo := newMockCoverageRepo().withValue1000(test.key, test.storedValue1000)
 			s := server.New(server.NewDefaultConfig(), mockRepo)
 
 			s.Handler().ServeHTTP(w, r)
@@ -218,20 +216,161 @@ func TestV0BadgeCoverageReturnsSVG(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/api/v0/badge/coverage?key="+key, nil)
 
-	mockRepo := newMockCoverageRepo()
-	err := mockRepo.StoreValue1000(context.Background(), key, value1000)
-
-	assert.NoError(t, err, "Unexpected error setting test value, bad test setup")
+	mockRepo := newMockCoverageRepo().withValue1000(key, value1000)
 
 	s := server.New(server.NewDefaultConfig(), mockRepo)
 
 	s.Handler().ServeHTTP(w, r)
 
-	// Should return 200 OK but the badge itself should indicate not found
 	assert.Equal(t, http.StatusOK, w.Code, "Unexpected HTTP status code")
 
 	body := w.Body.String()
 
-	// TODO: Better test of SVG correctness
+	// TODO: Better test of SVG correctness, but this is pretty visual...
 	assert.Contains(t, body, expectedText, "Missing expected percent coverage")
+	assert.Contains(t, body, badge.ColorRed, "Color is wrong")
+}
+
+func TestV0BadgeCoverageReturnsSVGWithColorThresholds(t *testing.T) {
+	const key = "github.com/Evertras/rcc"
+
+	tests := []struct {
+		name               string
+		thresholdOrange100 int
+		thresholdRed100    int
+		actualValue100     int
+		expectedColor      badge.Color
+		expected400        bool
+	}{
+		{
+			name:           "GreenWithDefaults",
+			actualValue100: 80,
+			expectedColor:  badge.ColorGreen,
+		},
+		{
+			name:           "OrangeWithDefaults",
+			actualValue100: 79,
+			expectedColor:  badge.ColorOrange,
+		},
+		{
+			name:           "OrangeWithDefaults",
+			actualValue100: 79,
+			expectedColor:  badge.ColorOrange,
+		},
+		{
+			name:               "OrangeWithOnlyOrangeAdjusted",
+			thresholdOrange100: 82,
+			actualValue100:     81,
+			expectedColor:      badge.ColorOrange,
+		},
+		{
+			name:            "RedOnlyRedAdjustedAboveOrangeThreshold",
+			thresholdRed100: 82,
+			actualValue100:  81,
+			expectedColor:   badge.ColorRed,
+		},
+		{
+			name:           "RedWithDefaults",
+			actualValue100: 49,
+			expectedColor:  badge.ColorRed,
+		},
+		{
+			name:               "GreenWithHighThresholds",
+			thresholdOrange100: 98,
+			thresholdRed100:    97,
+			actualValue100:     99,
+			expectedColor:      badge.ColorGreen,
+		},
+		{
+			name:               "GreenWithLowThresholds",
+			thresholdOrange100: 9,
+			thresholdRed100:    5,
+			actualValue100:     10,
+			expectedColor:      badge.ColorGreen,
+		},
+		{
+			name:               "OrangeWithLowThresholds",
+			thresholdOrange100: 9,
+			thresholdRed100:    5,
+			actualValue100:     8,
+			expectedColor:      badge.ColorOrange,
+		},
+		{
+			name:               "RedWithLowThresholds",
+			thresholdOrange100: 9,
+			thresholdRed100:    5,
+			actualValue100:     3,
+			expectedColor:      badge.ColorRed,
+		},
+		{
+			name:               "RedWithHighThresholds",
+			thresholdOrange100: 99,
+			thresholdRed100:    98,
+			actualValue100:     97,
+			expectedColor:      badge.ColorRed,
+		},
+		{
+			name:               "OrangeWithHighThresholds",
+			thresholdOrange100: 99,
+			thresholdRed100:    98,
+			actualValue100:     98,
+			expectedColor:      badge.ColorOrange,
+		},
+		{
+			name:               "OrangeTooHigh",
+			thresholdOrange100: 101,
+			actualValue100:     98,
+			expected400:        true,
+		},
+		{
+			name:               "OrangeTooLow",
+			thresholdOrange100: -1,
+			actualValue100:     98,
+			expected400:        true,
+		},
+		{
+			name:            "RedTooHigh",
+			thresholdRed100: 101,
+			expected400:     true,
+		},
+		{
+			name:            "RedTooLow",
+			thresholdRed100: -1,
+			expected400:     true,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			path := fmt.Sprintf("/api/v0/badge/coverage?key=%s", key)
+
+			if test.thresholdOrange100 != 0 {
+				path += fmt.Sprintf("&thresholdOrange100=%d%%25", test.thresholdOrange100)
+			}
+
+			if test.thresholdRed100 != 0 {
+				path += fmt.Sprintf("&thresholdRed100=%d%%25", test.thresholdRed100)
+			}
+
+			w := httptest.NewRecorder()
+			r := httptest.NewRequest("GET", path, nil)
+
+			mockRepo := newMockCoverageRepo().withValue1000(key, test.actualValue100*10)
+
+			s := server.New(server.NewDefaultConfig(), mockRepo)
+
+			s.Handler().ServeHTTP(w, r)
+
+			if test.expected400 {
+				assert.Equal(t, http.StatusBadRequest, w.Code, "Expected 400 failure")
+				return
+			}
+
+			assert.Equal(t, http.StatusOK, w.Code, "Unexpected HTTP status code")
+
+			body := w.Body.String()
+
+			assert.Contains(t, body, test.expectedColor, "Missing expected color")
+		})
+	}
 }
