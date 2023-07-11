@@ -16,3 +16,6 @@
 
 # Local file storage default
 /rcc-storage
+
+# Node stuff
+node_modules
