@@ -24,6 +24,9 @@ func New(cfg Config, coverageRepo CoverageRepository) *Server {
 	// Subrouters
 	r.Mount("/api", apiRouter(coverageRepo))
 
+	// Health checks
+	r.Get("/healthz", handlerHealth())
+
 	return &Server{
 		server: &http.Server{
 			Addr:    cfg.Address,
