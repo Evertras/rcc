@@ -7,7 +7,7 @@ locals {
 variable "app_count" {
   description = "How many instances to run"
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "rcc_version" {
