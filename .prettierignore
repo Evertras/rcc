@@ -14,3 +14,6 @@ tests/cyn-bdd-config.yaml
 
 # Prettier installs locally here
 node_modules
+
+# Terraform stuff
+.terraform
