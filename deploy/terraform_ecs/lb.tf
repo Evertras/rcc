@@ -33,8 +33,8 @@ resource "aws_lb_target_group" "api" {
 
   health_check {
     enabled = true
-    // For now, until we have a proper health check endpoint
-    matcher = "404"
+    path    = "/healthz"
+    matcher = "200"
   }
 }
 
