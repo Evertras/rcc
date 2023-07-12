@@ -9,3 +9,9 @@ variable "app_count" {
   type        = number
   default     = 2
 }
+
+variable "rcc_version" {
+  description = "The version tag to use"
+  type        = string
+  default     = "v0.1.0"
+}

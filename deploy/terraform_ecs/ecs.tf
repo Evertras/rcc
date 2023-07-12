@@ -9,7 +9,7 @@ resource "aws_ecs_task_definition" "api" {
   container_definitions = <<DEFINITION
 [
   {
-    "image": "evertras/rcc:v0.1.0",
+    "image": "evertras/rcc:${var.rcc_version}",
     "cpu": 256,
     "memory": 512,
     "name": "${local.prefix}-api",
