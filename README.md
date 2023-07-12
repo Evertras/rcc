@@ -118,17 +118,17 @@ Note: `[key]` can be any `[a-zA-Z0-9\./-]` value and is intended to take a value
 such as `github.com/Evertras/rcc`. This key is case sensitive with a max length
 of 64 characters.
 
-### PUT /api/v1/coverage?key=[key]&value100=[value100]
+### PUT /api/v0/coverage?key=[key]&value100=[value100]
 
 Sets the coverage value. `value100` is a number in the range of `[0.0, 100.0]%`
 to the nearest 1 decimal point for internal storage. The % sign is optional.
 
-### GET /api/v1/coverage?key=[key]
+### GET /api/v0/coverage?key=[key]
 
 Returns the coverage value as a plaintext value in the format `<0-100.0>%`. Returns
 rounded to the nearest decimal point.
 
-### GET /api/v1/badge/coverage?key=[key]
+### GET /api/v0/badge/coverage?key=[key]
 
 Returns a code coverage badge that can be linked to in a readme.
 
