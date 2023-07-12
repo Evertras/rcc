@@ -81,11 +81,13 @@ The table can be specified with `--dynamodb-table` and defaults to `evertras-rcc
 
 ## How it's deployed
 
-Currently deployed to `https://rcc.evertras.com/` via the [terraform](./terraform)
+Currently deployed to `https://rcc.evertras.com/` via the [terraform](./deploy/terraform_lambda)
 code provided here. Runs as an AWS Lambda writing to DynamoDB purely for
 cost purposes. This could be deployed as a containerized instance somewhere,
 but lambdas are pretty quick/cheap for something that doesn't need to be running
 all the time.
+
+For other example deployments, check [the deploy directory](./deploy).
 
 ### Docker
 
