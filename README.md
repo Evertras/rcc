@@ -99,7 +99,7 @@ either environment variables or command line flags if you wish to use other conf
 
 ```bash
 # Run it
-docker run -d -p 1234:8431 -v /some/data/path:/data evertras/rcc:v0.1.0
+docker run -d -p 1234:8341 -v /some/data/path:/data evertras/rcc:v0.1.1
 
 # Try it
 curl -XPUT "localhost:1234/api/v0/coverage?key=abc&value100=38.4"
@@ -117,6 +117,10 @@ ls /some/data/path
 Note: `[key]` can be any `[a-zA-Z0-9\./-]` value and is intended to take a value
 such as `github.com/Evertras/rcc`. This key is case sensitive with a max length
 of 64 characters.
+
+### GET /healthz
+
+Health endpoint for infrastructure to check. Currently always 200.
 
 ### PUT /api/v0/coverage?key=[key]&value100=[value100]
 
