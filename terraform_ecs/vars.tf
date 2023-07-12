@@ -1,6 +1,7 @@
 locals {
   prefix = terraform.workspace == "default" ? "evertras-rcc-ecs" : "evertras-rcc-ecs-${terraform.workspace}"
   port   = 8341
+  zones  = 2
 }
 
 variable "app_count" {

@@ -30,6 +30,12 @@ resource "aws_lb_target_group" "api" {
   protocol    = "HTTP"
   vpc_id      = aws_vpc.default.id
   target_type = "ip"
+
+  health_check {
+    enabled = true
+    // For now, until we have a proper health check endpoint
+    matcher = "404"
+  }
 }
 
 resource "aws_lb_listener" "api" {

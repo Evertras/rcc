@@ -27,7 +27,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Name = "evertras-rcc-ecs"
+      Deployment = "evertras-rcc-ecs"
     }
   }
 }
