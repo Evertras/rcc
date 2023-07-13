@@ -20,6 +20,12 @@ func v0HandlerBadgeCoverage(getter coverageValueGetter) http.HandlerFunc {
 			return
 		}
 
+		label := r.URL.Query().Get(queryParamLabel)
+
+		if label == "" {
+			label = "coverage"
+		}
+
 		getThreshold := func(queryParam string, defaultValue int) (int, error) {
 			raw := r.URL.Query().Get(queryParam)
 
@@ -79,7 +85,7 @@ func v0HandlerBadgeCoverage(getter coverageValueGetter) http.HandlerFunc {
 			color = badge.ColorOrange
 		}
 
-		b, err := badge.GenerateCoverageSVG("coverage", value1000, color)
+		b, err := badge.GenerateCoverageSVG(label, value1000, color)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			log.Printf("ERROR: Failed to generate badge from value %d: %s", value1000, err.Error())

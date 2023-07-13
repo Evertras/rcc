@@ -241,6 +241,7 @@ func TestV0BadgeCoverageReturnsSVGWithColorThresholds(t *testing.T) {
 		actualValue100     int
 		expectedColor      badge.Color
 		expected400        bool
+		label              string
 	}{
 		{
 			name:           "GreenWithDefaults",
@@ -273,6 +274,7 @@ func TestV0BadgeCoverageReturnsSVGWithColorThresholds(t *testing.T) {
 			name:           "RedWithDefaults",
 			actualValue100: 49,
 			expectedColor:  badge.ColorRed,
+			label:          "redredred",
 		},
 		{
 			name:               "GreenWithHighThresholds",
@@ -321,6 +323,7 @@ func TestV0BadgeCoverageReturnsSVGWithColorThresholds(t *testing.T) {
 			thresholdOrange100: 101,
 			actualValue100:     98,
 			expected400:        true,
+			label:              "orange2high",
 		},
 		{
 			name:               "OrangeTooLow",
@@ -342,6 +345,8 @@ func TestV0BadgeCoverageReturnsSVGWithColorThresholds(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			expectedLabel := "coverage"
+
 			path := fmt.Sprintf("/api/v0/badge/coverage?key=%s", key)
 
 			if test.thresholdOrange100 != 0 {
@@ -350,6 +355,11 @@ func TestV0BadgeCoverageReturnsSVGWithColorThresholds(t *testing.T) {
 
 			if test.thresholdRed100 != 0 {
 				path += fmt.Sprintf("&thresholdRed100=%d%%25", test.thresholdRed100)
+			}
+
+			if test.label != "" {
+				path += fmt.Sprintf("&label=%s", test.label)
+				expectedLabel = test.label
 			}
 
 			w := httptest.NewRecorder()
@@ -371,6 +381,7 @@ func TestV0BadgeCoverageReturnsSVGWithColorThresholds(t *testing.T) {
 			body := w.Body.String()
 
 			assert.Contains(t, body, test.expectedColor, "Missing expected color")
+			assert.Contains(t, body, expectedLabel, "Missing expected label")
 		})
 	}
 }
