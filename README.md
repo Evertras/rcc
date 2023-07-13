@@ -76,8 +76,8 @@ Stores data in DynamoDB because it's cheap and easy. The following schema is use
 | Value1000   | N    | The value of the percent coverage for the key, multiplied by 10 and stored as an integer for precision. |
 | LastUpdated | S    | The timestamp of when this coverage was last set.                                                       |
 
-Note that this is only really supported in the lambda version for now.
-The table can be specified with `--dynamodb-table` and defaults to `evertras-rcc`.
+The table can be specified with the `--dynamodb-table` flag or the `RCC_DYNAMODB_TABLE`
+environment variable.  It defaults to `evertras-rcc`.
 
 ## How it's deployed
 
